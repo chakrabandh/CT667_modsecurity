@@ -8,12 +8,12 @@
 project/
 ├── README.md
 ├── frontend/
-│   ├── docker-compose-frontend.yml
+│   ├── docker-compose.yml
 │   └── index.html
 └── modsecurity/
     ├── nginx/
     │   └── default.conf
-    └── docker-compose-nginx.yml
+    └── docker-compose.yml
 ```
 
 ## คุณสมบัติ
@@ -34,7 +34,7 @@ project/
 
 ```bash
 cd modsecurity
-docker-compose -f docker-compose-nginx.yml up -d
+docker-compose up -d
 cd ..
 ```
 
@@ -42,7 +42,7 @@ cd ..
 
 ```bash
 cd frontend
-docker-compose -f docker-compose-frontend.yml up -d
+docker-compose up -d
 cd ..
 ```
 
@@ -74,15 +74,21 @@ docker logs -f nginx-modsecurity
 ### หยุดการทำงาน
 
 ```bash
-docker-compose -f frontend/docker-compose-frontend.yml down
-docker-compose -f modsecurity/docker-compose-nginx.yml down
+cd frontend
+docker-compose down
+cd ../modsecurity
+docker-compose down
+cd ..
 ```
 
 ### Restart Services
 
 ```bash
-docker-compose -f modsecurity/docker-compose-nginx.yml restart
-docker-compose -f frontend/docker-compose-frontend.yml restart
+cd modsecurity
+docker-compose restart
+cd ../frontend
+docker-compose restart
+cd ..
 ```
 
 ## การทดสอบ WAF (ModSecurity)
@@ -135,7 +141,7 @@ tail -f /var/log/modsec_audit.log
 - **Paranoia Level**: 1 (ค่า default)
 - **Anomaly Score Threshold**: Inbound=5, Outbound=4
 
-### Frontend (frontend/docker-compose-frontend.yml)
+### Frontend (frontend/docker-compose.yml)
 
 - **Port**: 8080 (internal only, ไม่ expose ออกนอก)
 - **Web Server**: Nginx Alpine
@@ -176,7 +182,9 @@ volumes:
 แก้ไขไฟล์ `frontend/index.html` แล้ว restart:
 
 ```bash
-docker-compose -f frontend/docker-compose-frontend.yml restart
+cd frontend
+docker-compose restart
+cd ..
 ```
 
 ## Troubleshooting
@@ -203,7 +211,7 @@ docker logs nginx-modsecurity | grep -i "ModSecurity"
 
 ### Port Conflict
 
-ถ้า port 80 ถูกใช้งานแล้ว แก้ไขใน `docker-compose-nginx.yml`:
+ถ้า port 80 ถูกใช้งานแล้ว แก้ไขใน `modsecurity/docker-compose.yml`:
 
 ```yaml
 ports:
@@ -220,7 +228,3 @@ ports:
 ## License
 
 MIT License
-
-## ผู้พัฒนา
-
-สร้างโดย Claude & User
