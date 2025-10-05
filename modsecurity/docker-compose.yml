@@ -1,0 +1,23 @@
+services:
+  nginx:
+    image: owasp/modsecurity-crs:nginx-alpine
+    container_name: nginx-modsecurity
+    ports:
+      - "80:8080"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/custom.conf:ro
+    environment:
+      - BACKEND=http://frontend
+      - PORT=8080
+      - MODSEC_RULE_ENGINE=On
+      - MODSEC_REQ_BODY_ACCESS=On
+      - MODSEC_REQ_BODY_LIMIT=13107200
+      - MODSEC_RESP_BODY_ACCESS=On
+    networks:
+      - app-network
+    restart: unless-stopped
+
+networks:
+  app-network:
+    driver: bridge
+    name: app-network
