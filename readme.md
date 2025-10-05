@@ -224,7 +224,3 @@ ports:
 - ควรใช้ร่วมกับ secure coding practices
 - ควร monitor logs เป็นประจำ
 - พิจารณาเพิ่ม rate limiting และ DDoS protection
-
-## License
-
-MIT License
